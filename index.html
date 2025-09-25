@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blurred by bomer.tech - Protect Your Child's Privacy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #333;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .header-content {
+            text-align: center;
+            flex: 1;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 0.25rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .blurred-letter-1 { 
+            filter: blur(0.5px); 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .blurred-letter-2 { 
+            filter: blur(1px); 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .blurred-letter-3 { 
+            filter: blur(1.5px); 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .blurred-letter-4 { 
+            filter: blur(2px); 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #888;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .info-icon {
+            width: 24px;
+            height: 24px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+        }
+
+        .info-icon:hover {
+            background: #5a6fd8;
+            transform: scale(1.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #111;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 1px solid #333;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .modal h3 {
+            color: #ccc;
+            margin: 1.5rem 0 0.75rem 0;
+            font-size: 1.1rem;
+        }
+
+        .modal p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .modal ul {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .modal li {
+            margin-bottom: 0.5rem;
+        }
+
+        .close {
+            color: #888;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #667eea;
+        }
+
+        .privacy-highlight {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid #667eea;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .privacy-highlight p {
+            margin: 0;
+            color: #ccc;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .left-panel {
+            width: 300px;
+            padding: 2rem;
+            border-right: 1px solid #333;
+            background: #111;
+            overflow-y: auto;
+        }
+
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: #0f0f0f;
+            position: relative;
+        }
+
+        .right-panel {
+            width: 300px;
+            padding: 2rem;
+            border-left: 1px solid #333;
+            background: #111;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .right-panel h3 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .blur-points-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .upload-area {
+            border: 2px dashed #333;
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #1a1a1a;
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #1f1f1f;
+        }
+
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: #1f1f2f;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.6;
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+
+        .upload-subtext {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        #canvas {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            cursor: crosshair;
+            touch-action: none; /* Prevent scrolling and zooming on touch */
+            user-select: none; /* Prevent text selection */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .upload-new-btn {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.5rem;
+            background: rgba(51, 51, 51, 0.8);
+            color: #ccc;
+            border: 1px solid rgba(68, 68, 68, 0.6);
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .upload-new-btn:hover {
+            background: rgba(68, 68, 68, 0.9);
+            color: #fff;
+            border-color: rgba(85, 85, 85, 0.8);
+            transform: scale(1.05);
+        }
+
+        .controls {
+            margin-bottom: 2rem;
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #ccc;
+        }
+
+        .slider-container {
+            margin-bottom: 1rem;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #333;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .slider-value {
+            color: #888;
+            font-size: 0.9rem;
+            text-align: right;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: #ccc;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #444;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #c82333;
+        }
+
+        .blur-points-list {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            min-height: 0;
+        }
+
+        .blur-points-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .blur-points-list::-webkit-scrollbar-track {
+            background: #222;
+            border-radius: 3px;
+        }
+
+        .blur-points-list::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 3px;
+        }
+
+        .blur-points-list::-webkit-scrollbar-thumb:hover {
+            background: #5a6fd8;
+        }
+
+        #clearAll {
+            flex-shrink: 0;
+        }
+
+        .blur-point-item {
+            background: #222;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            border: 1px solid #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .blur-point-item:hover {
+            background: #2a2a2a;
+            border-color: #444;
+        }
+
+        .blur-point-item.active {
+            border-color: #667eea;
+            background: #1a1a2e;
+        }
+
+        .blur-point-item.active:hover {
+            background: #1f1f35;
+        }
+
+        .point-info {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+            pointer-events: none; /* Ensure clicks go to parent */
+        }
+
+        .point-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        .point-controls button {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .instructions {
+            background: #1a1a1a;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid #333;
+        }
+
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .instructions li {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .instructions li:before {
+            content: "•";
+            color: #667eea;
+            position: absolute;
+            left: 0;
+        }
+
+        .footer {
+            background: #0a0a0a;
+            border-top: 1px solid #333;
+            padding: 1rem 2rem;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: #888;
+            flex-shrink: 0;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #5a6fd8;
+        }
+
+        .github-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                flex-direction: column;
+                overflow-y: auto;
+            }
+
+            .left-panel,
+            .right-panel {
+                width: 100%;
+                border-right: none;
+                border-left: none;
+                border-bottom: 1px solid #333;
+                flex-shrink: 0;
+            }
+
+            .right-panel {
+                border-top: 1px solid #333;
+                flex: 1;
+                min-height: 300px;
+            }
+
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .header p {
+                font-size: 0.8rem;
+            }
+
+            .blurred-letter-1 { 
+                filter: blur(0.4px); 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            .blurred-letter-2 { 
+                filter: blur(0.8px); 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            .blurred-letter-3 { 
+                filter: blur(1.2px); 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            .blurred-letter-4 { 
+                filter: blur(1.6px); 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .left-panel,
+            .right-panel {
+                padding: 1rem;
+            }
+
+            .canvas-container {
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 0.75rem 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .header p {
+                font-size: 0.75rem;
+            }
+
+            .info-icon {
+                width: 20px;
+                height: 20px;
+                font-size: 12px;
+            }
+
+            .footer {
+                padding: 1rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .modal-content {
+                margin: 2% auto;
+                padding: 1.5rem;
+                width: 95%;
+            }
+
+            .upload-new-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+                top: 0.75rem;
+                left: 0.75rem;
+            }
+            
+            /* Mobile touch optimizations */
+            .btn {
+                min-height: 44px; /* Apple's recommended minimum touch target size */
+                font-size: 1rem;
+            }
+            
+            .point-controls button {
+                min-height: 40px;
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .slider {
+                height: 8px; /* Slightly larger for easier touch interaction */
+            }
+            
+            .slider::-webkit-slider-thumb {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .slider::-moz-range-thumb {
+                width: 24px;
+                height: 24px;
+            }
+            
+            /* Prevent zoom on double tap */
+            * {
+                touch-action: manipulation;
+            }
+            
+            /* Exception for canvas which we handle manually */
+            #canvas {
+                touch-action: none;
+            }
+
+            .blurred-letter-1 { 
+                filter: blur(0.3px); 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            .blurred-letter-2 { 
+                filter: blur(0.6px); 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            .blurred-letter-3 { 
+                filter: blur(0.9px); 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            .blurred-letter-4 { 
+                filter: blur(1.2px); 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Blu<span class="blurred-letter-1">r</span><span class="blurred-letter-2">r</span><span class="blurred-letter-3">e</span><span class="blurred-letter-4">d</span> by bomer.tech</h1>
+            <p>Protect your child's privacy with selective image blurring</p>
+        </div>
+        <button class="info-icon" id="infoBtn" title="Learn about protecting your child's privacy">i</button>
+    </header>
+
+    <div class="main-container">
+        <div class="left-panel">
+            <div class="instructions">
+                <h3>How to use:</h3>
+                <ul>
+                    <li>Upload an image</li>
+                    <li>Click image to add blur points</li>
+                    <li>Adjust blur points with the sliders</li>
+                    <li>Export your image</li>
+                </ul>
+            </div>
+
+            <div class="selected-point" id="selectedPointIndicator" style="display: none;">
+                <h3 style="color: #667eea; margin-bottom: 1rem; font-size: 1rem;">Editing Blur Point <span id="selectedPointNumber">1</span></h3>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label class="control-label">Blur Size</label>
+                    <div class="slider-container">
+                        <input type="range" id="blurSize" class="slider" min="10" max="150" value="120">
+                        <div class="slider-value"><span id="blurSizeValue">120</span>px</div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Blur Intensity</label>
+                    <div class="slider-container">
+                        <input type="range" id="blurIntensity" class="slider" min="1" max="20" value="12">
+                        <div class="slider-value"><span id="blurIntensityValue">12</span>px</div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Edge Softness</label>
+                    <div class="slider-container">
+                        <input type="range" id="blurFeather" class="slider" min="10" max="90" value="60">
+                        <div class="slider-value"><span id="blurFeatherValue">60</span>%</div>
+                    </div>
+                </div>
+
+                <button id="exportBtn" class="btn" disabled>Export Image</button>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📸</div>
+                <div class="upload-text">Click or drag an image here</div>
+                <div class="upload-subtext">Supports JPG, PNG, WebP</div>
+                <input type="file" id="fileInput" accept="image/*">
+            </div>
+            <canvas id="canvas" style="display: none;"></canvas>
+            <button id="uploadNewBtn" class="upload-new-btn" style="display: none;" title="Upload New Image">
+                +
+            </button>
+        </div>
+
+        <div class="right-panel">
+            <h3 style="color: #667eea; font-size: 1.2rem;" id="blurPointsHeader">Blur Points</h3>
+            
+            <div class="blur-points-container">
+                <div class="blur-points-list" id="blurPointsList">
+                </div>
+                <button id="clearAll" class="btn btn-danger" style="display: none;">Clear All Blur Points</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <span style="white-space: nowrap;">Made with ❤️ by bomer.tech</span>
+            <a href="https://github.com/bomertech/blurred" target="_blank" rel="noopener noreferrer">
+                <svg class="github-icon" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                GitHub
+            </a>
+            <a href="https://www.buymeacoffee.com/bomertech" target="_blank" rel="noopener noreferrer">
+                ☕ Buy me a coffee
+            </a>
+        </div>
+    </footer>
+
+    <div id="privacyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>🛡️ Protecting Your Child's Privacy Online</h2>
+            
+            <h3>Why this tool matters</h3>
+            <p>Sharing photos of your children on social media might seem harmless and fun for creating memories, but it can expose them to unexpected risks and negative outcomes in the future.</p>
+
+            <div class="privacy-highlight">
+                <p><strong>Remember:</strong> Once an image is posted online, you lose control over how it's used, shared, or stored by others.</p>
+            </div>
+
+            <h3>Potential Risks of Sharing Unprotected Photos</h3>
+            <ul>
+                <li><strong>Digital Kidnapping:</strong> Strangers can save and misuse photos of your child</li>
+                <li><strong>Identity Theft:</strong> Personal information can be extracted from images</li>
+                <li><strong>Future Embarrassment:</strong> Photos may resurface when your child is older</li>
+                <li><strong>Facial Recognition:</strong> Advanced AI can track and identify your child across platforms</li>
+                <li><strong>Location Tracking:</strong> Metadata in photos can reveal where you live or frequently visit</li>
+                <li><strong>Predator Targeting:</strong> Photos can be used to build profiles for inappropriate contact</li>
+            </ul>
+
+            <h3>How this tool protects your family</h3>
+            <p>Blurred by bomer.tech allows you to selectively blur faces and sensitive areas in photos before sharing them online, giving you control over your child's digital footprint while still allowing you to share precious moments.</p>
+
+            <h3>🔒 Your Privacy is Guaranteed</h3>
+            <div class="privacy-highlight">
+                <p><strong>100% Local Processing:</strong> All image editing happens directly in your browser. Your photos never leave your device or get uploaded to any server.</p>
+            </div>
+
+            <h3>🔓 Open Source & Transparent</h3>
+            <p>Blurred by bomer.tech is completely open source, meaning:</p>
+            <ul>
+                <li>You can review the code to verify no data is collected</li>
+                <li>You can run it locally on your own computer</li>
+                <li>You can contribute improvements or fork the project</li>
+                <li>The code is available on <a href="https://github.com/bomer-tech/blurapp" target="_blank" style="color: #667eea;">GitHub</a></li>
+            </ul>
+
+            <h3>💡 Best Practices</h3>
+            <ul>
+                <li>Always blur faces in public posts</li>
+                <li>Consider blurring identifying features like school uniforms or house numbers</li>
+                <li>Review privacy settings on all social media platforms</li>
+                <li>Teach your children about digital privacy as they grow</li>
+            </ul>
+
+            <p style="text-align: center; margin-top: 2rem; font-style: italic; color: #888;">Protecting your child's privacy today ensures their digital safety tomorrow.</p>
+        </div>
+    </div>
+
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <span class="close" id="closeConfirmationModal">&times;</span>
+            <h2>⚠️ Replace Image?</h2>
+            
+            <p>This will delete your current image and all blur points.</p>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button id="cancelReplacement" class="btn btn-secondary" style="flex: 1;">Cancel</button>
+                <button id="confirmReplacement" class="btn btn-danger" style="flex: 1;">Replace</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class BlurTool {
+            constructor() {
+                this.canvas = document.getElementById('canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.uploadArea = document.getElementById('uploadArea');
+                this.fileInput = document.getElementById('fileInput');
+                this.blurSize = document.getElementById('blurSize');
+                this.blurIntensity = document.getElementById('blurIntensity');
+                this.blurFeather = document.getElementById('blurFeather');
+                this.blurSizeValue = document.getElementById('blurSizeValue');
+                this.blurIntensityValue = document.getElementById('blurIntensityValue');
+                this.blurFeatherValue = document.getElementById('blurFeatherValue');
+                this.clearAllBtn = document.getElementById('clearAll');
+                this.exportBtn = document.getElementById('exportBtn');
+                this.uploadNewBtn = document.getElementById('uploadNewBtn');
+                this.blurPointsList = document.getElementById('blurPointsList');
+                this.selectedPointIndicator = document.getElementById('selectedPointIndicator');
+                this.selectedPointNumber = document.getElementById('selectedPointNumber');
+                
+                // Modal elements
+                this.infoBtn = document.getElementById('infoBtn');
+                this.modal = document.getElementById('privacyModal');
+                this.closeModal = document.getElementById('closeModal');
+                
+                // Confirmation modal elements
+                this.confirmationModal = document.getElementById('confirmationModal');
+                this.closeConfirmationModal = document.getElementById('closeConfirmationModal');
+                this.cancelReplacement = document.getElementById('cancelReplacement');
+                this.confirmReplacement = document.getElementById('confirmReplacement');
+                
+                // Create layered canvas system for better performance
+                this.baseCanvas = document.createElement('canvas');
+                this.baseCtx = this.baseCanvas.getContext('2d');
+                this.blurCanvas = document.createElement('canvas');
+                this.blurCtx = this.blurCanvas.getContext('2d');
+                
+                this.originalImage = null;
+                this.blurPoints = [];
+                this.activePoint = null;
+                this.isDragging = false;
+                this.updatePending = false;
+                this.debounceTimer = null;
+                this.dragOffset = null;
+                this.pendingFile = null; // Store file during confirmation process
+                
+                this.initEventListeners();
+                this.updateSliderValues();
+                this.updateBlurPointsList(); // Show initial empty state
+            }
+            
+            initEventListeners() {
+                // File upload
+                this.uploadArea.addEventListener('click', () => this.fileInput.click());
+                this.fileInput.addEventListener('change', (e) => this.handleFileSelect(e));
+                
+                // Drag and drop
+                this.uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    this.uploadArea.classList.add('dragover');
+                });
+                
+                this.uploadArea.addEventListener('dragleave', () => {
+                    this.uploadArea.classList.remove('dragover');
+                });
+                
+                this.uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    this.uploadArea.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        this.loadImage(files[0]);
+                    }
+                });
+                
+                this.canvas.addEventListener('click', (e) => this.handleCanvasClick(e));
+                this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+                this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+                this.canvas.addEventListener('mouseup', () => this.handleMouseUp());
+                
+                // Add touch event handlers for mobile
+                this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e));
+                this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e));
+                this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+                
+                this.canvas.addEventListener('mousemove', (e) => this.handleHover(e));
+                
+                this.blurPointsList.addEventListener('click', (e) => {
+                    if (e.target === this.blurPointsList) {
+                        this.deselectBlurPoint();
+                    }
+                });
+                
+                this.canvasContainer = document.querySelector('.canvas-container');
+                this.canvasContainer.addEventListener('click', (e) => {
+                    if (e.target === this.canvasContainer) {
+                        this.deselectBlurPoint();
+                    }
+                });
+                
+                this.rightPanel = document.querySelector('.right-panel');
+                this.blurPointsHeader = document.getElementById('blurPointsHeader');
+                
+                this.rightPanel.addEventListener('click', (e) => {
+                    if (e.target === this.rightPanel || 
+                        e.target.classList.contains('blur-points-container') ||
+                        (e.target.classList.contains('blur-points-list') && !e.target.classList.contains('blur-point-item'))) {
+                        this.deselectBlurPoint();
+                    }
+                });
+                
+                this.blurPointsHeader.addEventListener('click', () => {
+                    this.deselectBlurPoint();
+                });
+                
+                this.blurSize.addEventListener('input', () => this.debouncedUpdate());
+                this.blurIntensity.addEventListener('input', () => this.debouncedUpdate());
+                this.blurFeather.addEventListener('input', () => this.debouncedUpdate());
+                this.clearAllBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent bubbling to right panel
+                    this.clearAllBlurPoints();
+                });
+                this.exportBtn.addEventListener('click', () => this.exportImage());
+                this.uploadNewBtn.addEventListener('click', () => this.handleUploadNewClick());
+                
+                this.infoBtn.addEventListener('click', () => this.showModal());
+                this.closeModal.addEventListener('click', () => this.hideModal());
+                this.modal.addEventListener('click', (e) => {
+                    if (e.target === this.modal) {
+                        this.hideModal();
+                    }
+                });
+                
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.modal.style.display === 'block') {
+                        this.hideModal();
+                    }
+                    if (e.key === 'Escape' && this.confirmationModal.style.display === 'block') {
+                        this.hideConfirmationModal();
+                    }
+                });
+                
+                this.closeConfirmationModal.addEventListener('click', () => this.hideConfirmationModal());
+                this.cancelReplacement.addEventListener('click', () => this.hideConfirmationModal());
+                this.confirmReplacement.addEventListener('click', () => this.confirmImageReplacement());
+                this.confirmationModal.addEventListener('click', (e) => {
+                    if (e.target === this.confirmationModal) {
+                        this.hideConfirmationModal();
+                    }
+                });
+            }
+            
+            debouncedUpdate() {
+                this.updateSliderValues();
+                
+                if (this.debounceTimer) {
+                    clearTimeout(this.debounceTimer);
+                }
+                
+                this.debounceTimer = setTimeout(() => {
+                    if (this.activePoint) {
+                        this.activePoint.size = parseInt(this.blurSize.value);
+                        this.activePoint.intensity = parseInt(this.blurIntensity.value);
+                        this.activePoint.feather = parseInt(this.blurFeather.value) / 100; // Convert percentage to decimal
+                        this.scheduleRender();
+                        this.updateBlurPointsList();
+                    }
+                }, 50); // 50ms debounce
+            }
+            
+            updateSliderValues() {
+                this.blurSizeValue.textContent = this.blurSize.value;
+                this.blurIntensityValue.textContent = this.blurIntensity.value;
+                this.blurFeatherValue.textContent = this.blurFeather.value;
+            }
+            
+            scheduleRender() {
+                if (!this.updatePending) {
+                    this.updatePending = true;
+                    requestAnimationFrame(() => {
+                        this.renderImage();
+                        this.updatePending = false;
+                    });
+                }
+            }
+            
+            handleFileSelect(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Check if there's existing data that would be lost
+                    if (this.originalImage || this.blurPoints.length > 0) {
+                        this.pendingFile = file;
+                        this.showConfirmationModal();
+                        // Clear the file input so the same file can be selected again if needed
+                        e.target.value = '';
+                    } else {
+                        this.loadImage(file);
+                    }
+                }
+            }
+            
+            loadImage(file) {
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file.');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        this.originalImage = img;
+                        this.setupCanvas();
+                        this.scheduleRender();
+                        this.showCanvas();
+                        this.enableControls();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            setupCanvas() {
+                const maxWidth = 1000;
+                const maxHeight = 700;
+                
+                let { width, height } = this.originalImage;
+                
+                if (width > maxWidth) {
+                    height = (height * maxWidth) / width;
+                    width = maxWidth;
+                }
+                
+                if (height > maxHeight) {
+                    width = (width * maxHeight) / height;
+                    height = maxHeight;
+                }
+                
+                // Setup all canvases with same dimensions
+                [this.canvas, this.baseCanvas, this.blurCanvas].forEach(canvas => {
+                    canvas.width = width;
+                    canvas.height = height;
+                });
+                
+                this.canvas.style.width = width + 'px';
+                this.canvas.style.height = height + 'px';
+                
+                // Draw the base image once
+                this.baseCtx.drawImage(this.originalImage, 0, 0, width, height);
+            }
+            
+            renderImage() {
+                if (!this.originalImage) return;
+                
+                // Start with the base image
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.ctx.drawImage(this.baseCanvas, 0, 0);
+                
+                // Apply blur effects efficiently
+                this.blurPoints.forEach(point => {
+                    this.applyBlurEffect(point);
+                });
+                
+                // Draw blur point indicators
+                this.blurPoints.forEach(point => {
+                    this.drawBlurIndicator(point);
+                });
+            }
+            
+            applyBlurEffect(point) {
+                // Calculate area to work with (add padding for blur effect)
+                const padding = point.intensity + 10;
+                const x = Math.max(0, point.x - point.size - padding);
+                const y = Math.max(0, point.y - point.size - padding);
+                const width = Math.min(this.canvas.width - x, Math.max(0, (point.size + padding) * 2));
+                const height = Math.min(this.canvas.height - y, Math.max(0, (point.size + padding) * 2));
+                
+                // Skip rendering if the blur area doesn't intersect with the canvas
+                if (width <= 0 || height <= 0) return;
+                
+                // Create temporary canvases for the effect
+                const blurCanvas = document.createElement('canvas');
+                const blurCtx = blurCanvas.getContext('2d');
+                blurCanvas.width = width;
+                blurCanvas.height = height;
+                
+                const maskCanvas = document.createElement('canvas');
+                const maskCtx = maskCanvas.getContext('2d');
+                maskCanvas.width = width;
+                maskCanvas.height = height;
+                
+                // Draw the area to blur canvas
+                blurCtx.drawImage(this.baseCanvas, x, y, width, height, 0, 0, width, height);
+                
+                // Apply blur effect - use mobile-compatible method
+                this.applyCanvasBlur(blurCtx, blurCanvas, point.intensity);
+                
+                // Create alpha mask with feathering
+                const gradient = maskCtx.createRadialGradient(
+                    point.x - x, point.y - y, 0,
+                    point.x - x, point.y - y, point.size
+                );
+                gradient.addColorStop(0, 'rgba(255,255,255,1)');                    // Fully opaque at center
+                gradient.addColorStop(point.feather || 0.6, 'rgba(255,255,255,1)');        // Stay opaque until feather point (fallback to 0.6)
+                gradient.addColorStop(1, 'rgba(255,255,255,0)');                    // Fade to transparent at edge
+                
+                maskCtx.fillStyle = gradient;
+                maskCtx.fillRect(0, 0, width, height);
+                
+                // Apply mask to blurred image
+                blurCtx.globalCompositeOperation = 'destination-in';
+                blurCtx.drawImage(maskCanvas, 0, 0);
+                
+                // Composite the feathered blur back onto main canvas
+                this.ctx.drawImage(blurCanvas, x, y);
+            }
+            
+            // Mobile-compatible blur method that works across all browsers
+            applyCanvasBlur(ctx, canvas, intensity) {
+                // Try CSS filter first (faster, but may not work on all mobile browsers)
+                if (this.supportsCanvasFilter()) {
+                    ctx.filter = `blur(${intensity}px)`;
+                    ctx.drawImage(canvas, 0, 0);
+                    ctx.filter = 'none'; // Reset filter
+                } else {
+                    // Fallback to manual blur for mobile compatibility
+                    this.manualBlur(ctx, canvas, intensity);
+                }
+            }
+            
+            // Check if browser supports canvas filter property
+            supportsCanvasFilter() {
+                // Cache the result to avoid repeated checks
+                if (this._canvasFilterSupported === undefined) {
+                    const testCanvas = document.createElement('canvas');
+                    const testCtx = testCanvas.getContext('2d');
+                    testCtx.filter = 'blur(1px)';
+                    this._canvasFilterSupported = testCtx.filter.includes('blur');
+                }
+                return this._canvasFilterSupported;
+            }
+            
+            // Manual blur implementation for mobile browsers that don't support canvas filters
+            manualBlur(ctx, canvas, intensity) {
+                // Create a scaled-down version for performance
+                const scale = Math.max(0.1, Math.min(1, 8 / intensity)); // Scale based on blur intensity
+                const scaledWidth = Math.floor(canvas.width * scale);
+                const scaledHeight = Math.floor(canvas.height * scale);
+                
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = scaledWidth;
+                tempCanvas.height = scaledHeight;
+                
+                // Disable image smoothing for sharper downscaling
+                tempCtx.imageSmoothingEnabled = false;
+                
+                // Draw scaled down version
+                tempCtx.drawImage(canvas, 0, 0, scaledWidth, scaledHeight);
+                
+                // Re-enable smoothing for upscaling (creates blur effect)
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                
+                // Draw multiple slightly offset copies to enhance blur effect
+                const blurPasses = Math.min(8, Math.max(2, Math.floor(intensity / 3)));
+                const offsetStep = intensity / 4;
+                
+                ctx.globalAlpha = 1 / blurPasses;
+                
+                for (let i = 0; i < blurPasses; i++) {
+                    const offsetX = (Math.random() - 0.5) * offsetStep;
+                    const offsetY = (Math.random() - 0.5) * offsetStep;
+                    
+                    ctx.drawImage(tempCanvas, 
+                        offsetX, offsetY, 
+                        canvas.width, canvas.height
+                    );
+                }
+                
+                ctx.globalAlpha = 1; // Reset alpha
+                ctx.imageSmoothingEnabled = true; // Reset smoothing
+            }
+            
+            drawBlurIndicator(point) {
+                // Only show indicator for the active (selected) point
+                if (point === this.activePoint) {
+                    this.ctx.save();
+                    this.ctx.strokeStyle = '#667eea';
+                    this.ctx.lineWidth = 2;
+                    this.ctx.setLineDash([5, 5]);
+                    this.ctx.beginPath();
+                    this.ctx.arc(point.x, point.y, point.size, 0, Math.PI * 2);
+                    this.ctx.stroke();
+                    
+                    // Center dot for active point
+                    this.ctx.fillStyle = '#667eea';
+                    this.ctx.setLineDash([]);
+                    this.ctx.beginPath();
+                    this.ctx.arc(point.x, point.y, 4, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.restore();
+                }
+            }
+            
+            handleCanvasClick(e) {
+                if (this.isDragging) return;
+                
+                const rect = this.canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Check if clicking on existing point
+                const clickedPoint = this.blurPoints.find(point => {
+                    const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+                    return distance <= point.size;
+                });
+                
+                if (clickedPoint) {
+                    this.selectBlurPoint(clickedPoint);
+                } else {
+                    // If there's an active point, deselect it first
+                    if (this.activePoint) {
+                        this.deselectBlurPoint();
+                    } else {
+                        // Only add new blur point if there's no active point
+                        this.addBlurPoint(x, y);
+                    }
+                }
+            }
+            
+            handleMouseDown(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const clickedPoint = this.blurPoints.find(point => {
+                    const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+                    return distance <= point.size; // Entire blur area is draggable
+                });
+                
+                if (clickedPoint) {
+                    this.selectBlurPoint(clickedPoint);
+                    this.isDragging = true;
+                    this.canvas.style.cursor = 'grabbing';
+                    
+                    // Store offset from center for smooth dragging
+                    this.dragOffset = {
+                        x: x - clickedPoint.x,
+                        y: y - clickedPoint.y
+                    };
+                }
+            }
+            
+            handleMouseMove(e) {
+                if (!this.isDragging || !this.activePoint) return;
+                
+                const rect = this.canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Apply drag offset for smooth movement
+                const newX = x - (this.dragOffset ? this.dragOffset.x : 0);
+                const newY = y - (this.dragOffset ? this.dragOffset.y : 0);
+                
+                // Allow blur points to extend beyond image edges with reasonable limits
+                const buffer = this.activePoint.size * 2; // Allow points to go 2x their size beyond edges
+                this.activePoint.x = Math.max(-buffer, Math.min(this.canvas.width + buffer, newX));
+                this.activePoint.y = Math.max(-buffer, Math.min(this.canvas.height + buffer, newY));
+                
+                this.scheduleRender();
+                this.updateBlurPointsList();
+            }
+            
+            handleMouseUp() {
+                this.isDragging = false;
+                this.canvas.style.cursor = 'crosshair';
+                this.dragOffset = null;
+            }
+            
+            // Touch event handlers for mobile support - In progress
+            handleTouchStart(e) {
+                e.preventDefault(); // Prevent scrolling while interacting with blur points
+                
+                if (e.touches.length !== 1) return; // Only handle single touch
+                
+                const touch = e.touches[0];
+                const rect = this.canvas.getBoundingClientRect();
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                
+                const clickedPoint = this.blurPoints.find(point => {
+                    const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+                    return distance <= point.size;
+                });
+                
+                if (clickedPoint) {
+                    this.selectBlurPoint(clickedPoint);
+                    this.isDragging = true;
+                    
+                    // Store offset from center for smooth dragging
+                    this.dragOffset = {
+                        x: x - clickedPoint.x,
+                        y: y - clickedPoint.y
+                    };
+                } else {
+                    // Handle tap to add new blur point or deselect
+                    if (this.activePoint) {
+                        this.deselectBlurPoint();
+                    } else {
+                        this.addBlurPoint(x, y);
+                    }
+                }
+            }
+            
+            handleTouchMove(e) {
+                e.preventDefault(); // Prevent scrolling during drag
+                
+                if (!this.isDragging || !this.activePoint || e.touches.length !== 1) return;
+                
+                const touch = e.touches[0];
+                const rect = this.canvas.getBoundingClientRect();
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                
+                // Apply drag offset for smooth movement
+                const newX = x - (this.dragOffset ? this.dragOffset.x : 0);
+                const newY = y - (this.dragOffset ? this.dragOffset.y : 0);
+                
+                // Allow blur points to extend beyond image edges with reasonable limits
+                const buffer = this.activePoint.size * 2;
+                this.activePoint.x = Math.max(-buffer, Math.min(this.canvas.width + buffer, newX));
+                this.activePoint.y = Math.max(-buffer, Math.min(this.canvas.height + buffer, newY));
+                
+                this.scheduleRender();
+                this.updateBlurPointsList();
+            }
+            
+            handleTouchEnd(e) {
+                e.preventDefault(); // Prevent ghost clicks and scrolling
+                this.isDragging = false;
+                this.dragOffset = null;
+            }
+            
+            handleHover(e) {
+                if (this.isDragging) return;
+                
+                const rect = this.canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const hoveredPoint = this.blurPoints.find(point => {
+                    const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+                    return distance <= point.size;
+                });
+                
+                if (hoveredPoint) {
+                    this.canvas.style.cursor = 'grab';
+                } else {
+                    this.canvas.style.cursor = 'crosshair';
+                }
+            }
+            
+            addBlurPoint(x, y) {
+                const point = {
+                    id: Date.now(),
+                    x: x,
+                    y: y,
+                    size: parseInt(this.blurSize.value),
+                    intensity: parseInt(this.blurIntensity.value),
+                    feather: parseInt(this.blurFeather.value) / 100 // Convert percentage to decimal
+                };
+                
+                this.blurPoints.push(point);
+                this.selectBlurPoint(point);
+                this.scheduleRender();
+                this.updateBlurPointsList();
+            }
+            
+            selectBlurPoint(point) {
+                this.activePoint = point;
+                this.blurSize.value = point.size;
+                this.blurIntensity.value = point.intensity;
+                this.blurFeather.value = Math.round((point.feather || 0.6) * 100); // Convert decimal back to percentage (fallback to 60%)
+                this.updateSliderValues();
+                this.updateSelectedPointIndicator();
+                this.scheduleRender();
+                this.updateBlurPointsList();
+            }
+            
+            updateSelectedPointIndicator() {
+                if (this.activePoint) {
+                    const pointIndex = this.blurPoints.indexOf(this.activePoint) + 1;
+                    this.selectedPointNumber.textContent = pointIndex;
+                    this.selectedPointIndicator.style.display = 'block';
+                } else {
+                    this.selectedPointIndicator.style.display = 'none';
+                }
+            }
+            
+            deselectBlurPoint() {
+                this.activePoint = null;
+                this.updateSelectedPointIndicator();
+                this.scheduleRender();
+                this.updateBlurPointsList();
+            }
+            
+            removeBlurPoint(point) {
+                const index = this.blurPoints.indexOf(point);
+                if (index > -1) {
+                    this.blurPoints.splice(index, 1);
+                    if (this.activePoint === point) {
+                        this.activePoint = null;
+                    }
+                    this.updateSelectedPointIndicator();
+                    this.scheduleRender();
+                    this.updateBlurPointsList();
+                }
+            }
+            
+            clearAllBlurPoints() {
+                this.blurPoints = [];
+                this.activePoint = null;
+                this.updateSelectedPointIndicator();
+                this.scheduleRender();
+                this.updateBlurPointsList();
+            }
+            
+            updateBlurPointsList() {
+                this.blurPointsList.innerHTML = '';
+                
+                // Show/hide clear all button based on whether there are blur points
+                if (this.blurPoints.length > 0) {
+                    this.clearAllBtn.style.display = 'block';
+                } else {
+                    this.clearAllBtn.style.display = 'none';
+                }
+                
+                this.blurPoints.forEach((point, index) => {
+                    const item = document.createElement('div');
+                    item.className = `blur-point-item ${point === this.activePoint ? 'active' : ''}`;
+                    item.innerHTML = `
+                        <div class="point-info">
+                            Point ${index + 1} - Size: ${point.size}px, Blur: ${point.intensity}px, Edge: ${Math.round((point.feather || 0.6) * 100)}%
+                        </div>
+                        <div class="point-controls">
+                            <button class="btn btn-danger" onclick="event.stopPropagation(); app.removeBlurPoint(app.blurPoints[${index}])">Remove</button>
+                        </div>
+                    `;
+                    
+                    // Make the entire item clickable to select the blur point
+                    item.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent bubbling to right panel
+                        this.selectBlurPoint(point);
+                    });
+                    
+                    this.blurPointsList.appendChild(item);
+                });
+                
+                if (this.blurPoints.length === 0) {
+                    const emptyMsg = document.createElement('div');
+                    emptyMsg.style.color = '#666';
+                    emptyMsg.style.textAlign = 'center';
+                    emptyMsg.style.padding = '1rem';
+                    emptyMsg.style.pointerEvents = 'none'; // Prevent interfering with list clicks
+                    emptyMsg.textContent = 'No blur points yet. Click on the image to add one.';
+                    this.blurPointsList.appendChild(emptyMsg);
+                }
+            }
+            
+            exportImage() {
+                if (!this.originalImage) return;
+                
+                // Create a high-quality version for export
+                const exportCanvas = document.createElement('canvas');
+                const exportCtx = exportCanvas.getContext('2d');
+                
+                exportCanvas.width = this.originalImage.width;
+                exportCanvas.height = this.originalImage.height;
+                
+                // Scale factor for blur points
+                const scaleX = this.originalImage.width / this.canvas.width;
+                const scaleY = this.originalImage.height / this.canvas.height;
+                
+                // Draw original image at full resolution
+                exportCtx.drawImage(this.originalImage, 0, 0);
+                
+                // Apply blur effects at full resolution using the same feathering method
+                this.blurPoints.forEach(point => {
+                    const scaledPoint = {
+                        x: point.x * scaleX,
+                        y: point.y * scaleY,
+                        size: point.size * Math.max(scaleX, scaleY),
+                        intensity: point.intensity * Math.max(scaleX, scaleY)
+                    };
+                    
+                    // Calculate area to work with (add padding for blur effect)
+                    const padding = scaledPoint.intensity + 20;
+                    const x = Math.max(0, scaledPoint.x - scaledPoint.size - padding);
+                    const y = Math.max(0, scaledPoint.y - scaledPoint.size - padding);
+                    const width = Math.min(exportCanvas.width - x, Math.max(0, (scaledPoint.size + padding) * 2));
+                    const height = Math.min(exportCanvas.height - y, Math.max(0, (scaledPoint.size + padding) * 2));
+                    
+                    // Skip rendering if the blur area doesn't intersect with the export canvas
+                    if (width <= 0 || height <= 0) return;
+                    
+                    // Create temporary canvases for the effect
+                    const blurCanvas = document.createElement('canvas');
+                    const blurCtx = blurCanvas.getContext('2d');
+                    blurCanvas.width = width;
+                    blurCanvas.height = height;
+                    
+                    const maskCanvas = document.createElement('canvas');
+                    const maskCtx = maskCanvas.getContext('2d');
+                    maskCanvas.width = width;
+                    maskCanvas.height = height;
+                    
+                    // Draw the area to blur canvas
+                    blurCtx.drawImage(this.originalImage, x, y, width, height, 0, 0, width, height);
+                    
+                    // Apply blur to the extracted area - use mobile-compatible method
+                    this.applyCanvasBlur(blurCtx, blurCanvas, scaledPoint.intensity);
+                    
+                    // Create alpha mask with feathering
+                    const gradient = maskCtx.createRadialGradient(
+                        scaledPoint.x - x, scaledPoint.y - y, 0,
+                        scaledPoint.x - x, scaledPoint.y - y, scaledPoint.size
+                    );
+                    gradient.addColorStop(0, 'rgba(255,255,255,1)');                    // Fully opaque at center
+                    gradient.addColorStop(point.feather || 0.6, 'rgba(255,255,255,1)');        // Stay opaque until feather point (fallback to 0.6)
+                    gradient.addColorStop(1, 'rgba(255,255,255,0)');                    // Fade to transparent at edge
+                    
+                    maskCtx.fillStyle = gradient;
+                    maskCtx.fillRect(0, 0, width, height);
+                    
+                    // Apply mask to blurred image
+                    blurCtx.globalCompositeOperation = 'destination-in';
+                    blurCtx.drawImage(maskCanvas, 0, 0);
+                    
+                    // Composite the feathered blur back onto export canvas
+                    exportCtx.drawImage(blurCanvas, x, y);
+                });
+                
+                // Download the image
+                exportCanvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `blurred-image-${Date.now()}.png`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                }, 'image/png', 0.95);
+            }
+            
+            showCanvas() {
+                this.uploadArea.style.display = 'none';
+                this.canvas.style.display = 'block';
+            }
+            
+            enableControls() {
+                this.exportBtn.disabled = false;
+                this.uploadNewBtn.style.display = 'block';
+            }
+            
+            showModal() {
+                this.modal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+            
+            hideModal() {
+                this.modal.style.display = 'none';
+                document.body.style.overflow = 'hidden'; // Keep overflow hidden since we don't want page scrolling
+            }
+            
+            handleUploadNewClick() {
+                this.fileInput.click();
+            }
+            
+            showConfirmationModal() {
+                this.confirmationModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+            
+            hideConfirmationModal() {
+                this.confirmationModal.style.display = 'none';
+                document.body.style.overflow = 'hidden';
+                this.pendingFile = null; // Clear pending file
+            }
+            
+            confirmImageReplacement() {
+                if (this.pendingFile) {
+                    this.clearAllData();
+                    this.loadImage(this.pendingFile);
+                    this.pendingFile = null;
+                }
+                this.hideConfirmationModal();
+            }
+            
+            clearAllData() {
+                // Clear blur points and selection
+                this.blurPoints = [];
+                this.activePoint = null;
+                this.updateSelectedPointIndicator();
+                this.updateBlurPointsList();
+                
+                // Clear image data
+                this.originalImage = null;
+                
+                // Hide canvas and show upload area
+                this.canvas.style.display = 'none';
+                this.uploadArea.style.display = 'block';
+                
+                // Hide controls
+                this.exportBtn.disabled = true;
+                this.uploadNewBtn.style.display = 'none';
+                
+                // Clear canvas
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+        }
+        
+        // Initialize the app
+        const app = new BlurTool();
+    </script>
+</body>
+</html>
