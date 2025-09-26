@@ -1183,49 +1183,74 @@
             applyBlurEffect(point) {
                 // Calculate area to work with (add padding for blur effect)
                 const padding = point.intensity + 10;
-                const x = Math.max(0, point.x - point.size - padding);
-                const y = Math.max(0, point.y - point.size - padding);
-                const width = Math.min(this.canvas.width - x, Math.max(0, (point.size + padding) * 2));
-                const height = Math.min(this.canvas.height - y, Math.max(0, (point.size + padding) * 2));
                 
-                // Skip rendering if the blur area doesn't intersect with the canvas
-                if (width <= 0 || height <= 0) return;
+                // Allow blur area to extend beyond canvas edges for proper edge coverage
+                const blurAreaX = point.x - point.size - padding;
+                const blurAreaY = point.y - point.size - padding;
+                const blurAreaWidth = (point.size + padding) * 2;
+                const blurAreaHeight = (point.size + padding) * 2;
                 
-                // Create temporary canvases for the effect
+                // Calculate intersection with canvas for final compositing
+                const canvasIntersectX = Math.max(0, blurAreaX);
+                const canvasIntersectY = Math.max(0, blurAreaY);
+                const canvasIntersectWidth = Math.min(this.canvas.width - canvasIntersectX, 
+                    Math.max(0, blurAreaX + blurAreaWidth - canvasIntersectX));
+                const canvasIntersectHeight = Math.min(this.canvas.height - canvasIntersectY, 
+                    Math.max(0, blurAreaY + blurAreaHeight - canvasIntersectY));
+                
+                // Skip rendering if no intersection with canvas
+                if (canvasIntersectWidth <= 0 || canvasIntersectHeight <= 0) return;
+                
+                // Create temporary canvases for the effect (full blur area size)
                 const blurCanvas = document.createElement('canvas');
                 const blurCtx = blurCanvas.getContext('2d');
-                blurCanvas.width = width;
-                blurCanvas.height = height;
+                blurCanvas.width = blurAreaWidth;
+                blurCanvas.height = blurAreaHeight;
                 
                 const maskCanvas = document.createElement('canvas');
                 const maskCtx = maskCanvas.getContext('2d');
-                maskCanvas.width = width;
-                maskCanvas.height = height;
+                maskCanvas.width = blurAreaWidth;
+                maskCanvas.height = blurAreaHeight;
                 
-                // Draw the area to blur canvas
-                blurCtx.drawImage(this.baseCanvas, x, y, width, height, 0, 0, width, height);
+                // Draw the area to blur canvas, handling edge cases
+                const sourceX = Math.max(0, blurAreaX);
+                const sourceY = Math.max(0, blurAreaY);
+                const sourceWidth = Math.min(this.canvas.width - sourceX, blurAreaWidth - (sourceX - blurAreaX));
+                const sourceHeight = Math.min(this.canvas.height - sourceY, blurAreaHeight - (sourceY - blurAreaY));
+                const destX = sourceX - blurAreaX;
+                const destY = sourceY - blurAreaY;
+                
+                if (sourceWidth > 0 && sourceHeight > 0) {
+                    blurCtx.drawImage(this.baseCanvas, sourceX, sourceY, sourceWidth, sourceHeight, 
+                        destX, destY, sourceWidth, sourceHeight);
+                }
                 
                 // Apply blur effect - use mobile-compatible method
                 this.applyCanvasBlur(blurCtx, blurCanvas, point.intensity);
                 
-                // Create alpha mask with feathering
+                // Create alpha mask with feathering (relative to full blur area)
                 const gradient = maskCtx.createRadialGradient(
-                    point.x - x, point.y - y, 0,
-                    point.x - x, point.y - y, point.size
+                    point.x - blurAreaX, point.y - blurAreaY, 0,
+                    point.x - blurAreaX, point.y - blurAreaY, point.size
                 );
                 gradient.addColorStop(0, 'rgba(255,255,255,1)');                    // Fully opaque at center
                 gradient.addColorStop(point.feather || 0.6, 'rgba(255,255,255,1)');        // Stay opaque until feather point (fallback to 0.6)
                 gradient.addColorStop(1, 'rgba(255,255,255,0)');                    // Fade to transparent at edge
                 
                 maskCtx.fillStyle = gradient;
-                maskCtx.fillRect(0, 0, width, height);
+                maskCtx.fillRect(0, 0, blurAreaWidth, blurAreaHeight);
                 
                 // Apply mask to blurred image
                 blurCtx.globalCompositeOperation = 'destination-in';
                 blurCtx.drawImage(maskCanvas, 0, 0);
                 
-                // Composite the feathered blur back onto main canvas
-                this.ctx.drawImage(blurCanvas, x, y);
+                // Composite only the intersecting portion back onto main canvas
+                const finalSourceX = canvasIntersectX - blurAreaX;
+                const finalSourceY = canvasIntersectY - blurAreaY;
+                
+                this.ctx.drawImage(blurCanvas, 
+                    finalSourceX, finalSourceY, canvasIntersectWidth, canvasIntersectHeight,
+                    canvasIntersectX, canvasIntersectY, canvasIntersectWidth, canvasIntersectHeight);
             }
             
             // Mobile-compatible blur method that works across all browsers
@@ -1609,49 +1634,74 @@
                     
                     // Calculate area to work with (add padding for blur effect)
                     const padding = scaledPoint.intensity + 20;
-                    const x = Math.max(0, scaledPoint.x - scaledPoint.size - padding);
-                    const y = Math.max(0, scaledPoint.y - scaledPoint.size - padding);
-                    const width = Math.min(exportCanvas.width - x, Math.max(0, (scaledPoint.size + padding) * 2));
-                    const height = Math.min(exportCanvas.height - y, Math.max(0, (scaledPoint.size + padding) * 2));
                     
-                    // Skip rendering if the blur area doesn't intersect with the export canvas
-                    if (width <= 0 || height <= 0) return;
+                    // Allow blur area to extend beyond canvas edges for proper edge coverage
+                    const blurAreaX = scaledPoint.x - scaledPoint.size - padding;
+                    const blurAreaY = scaledPoint.y - scaledPoint.size - padding;
+                    const blurAreaWidth = (scaledPoint.size + padding) * 2;
+                    const blurAreaHeight = (scaledPoint.size + padding) * 2;
                     
-                    // Create temporary canvases for the effect
+                    // Calculate intersection with export canvas for final compositing
+                    const canvasIntersectX = Math.max(0, blurAreaX);
+                    const canvasIntersectY = Math.max(0, blurAreaY);
+                    const canvasIntersectWidth = Math.min(exportCanvas.width - canvasIntersectX, 
+                        Math.max(0, blurAreaX + blurAreaWidth - canvasIntersectX));
+                    const canvasIntersectHeight = Math.min(exportCanvas.height - canvasIntersectY, 
+                        Math.max(0, blurAreaY + blurAreaHeight - canvasIntersectY));
+                    
+                    // Skip rendering if no intersection with export canvas
+                    if (canvasIntersectWidth <= 0 || canvasIntersectHeight <= 0) return;
+                    
+                    // Create temporary canvases for the effect (full blur area size)
                     const blurCanvas = document.createElement('canvas');
                     const blurCtx = blurCanvas.getContext('2d');
-                    blurCanvas.width = width;
-                    blurCanvas.height = height;
+                    blurCanvas.width = blurAreaWidth;
+                    blurCanvas.height = blurAreaHeight;
                     
                     const maskCanvas = document.createElement('canvas');
                     const maskCtx = maskCanvas.getContext('2d');
-                    maskCanvas.width = width;
-                    maskCanvas.height = height;
+                    maskCanvas.width = blurAreaWidth;
+                    maskCanvas.height = blurAreaHeight;
                     
-                    // Draw the area to blur canvas
-                    blurCtx.drawImage(this.originalImage, x, y, width, height, 0, 0, width, height);
+                    // Draw the area to blur canvas, handling edge cases
+                    const sourceX = Math.max(0, blurAreaX);
+                    const sourceY = Math.max(0, blurAreaY);
+                    const sourceWidth = Math.min(exportCanvas.width - sourceX, blurAreaWidth - (sourceX - blurAreaX));
+                    const sourceHeight = Math.min(exportCanvas.height - sourceY, blurAreaHeight - (sourceY - blurAreaY));
+                    const destX = sourceX - blurAreaX;
+                    const destY = sourceY - blurAreaY;
+                    
+                    if (sourceWidth > 0 && sourceHeight > 0) {
+                        blurCtx.drawImage(this.originalImage, sourceX, sourceY, sourceWidth, sourceHeight, 
+                            destX, destY, sourceWidth, sourceHeight);
+                    }
                     
                     // Apply blur to the extracted area - use mobile-compatible method
                     this.applyCanvasBlur(blurCtx, blurCanvas, scaledPoint.intensity);
                     
-                    // Create alpha mask with feathering
+                    // Create alpha mask with feathering (relative to full blur area)
                     const gradient = maskCtx.createRadialGradient(
-                        scaledPoint.x - x, scaledPoint.y - y, 0,
-                        scaledPoint.x - x, scaledPoint.y - y, scaledPoint.size
+                        scaledPoint.x - blurAreaX, scaledPoint.y - blurAreaY, 0,
+                        scaledPoint.x - blurAreaX, scaledPoint.y - blurAreaY, scaledPoint.size
                     );
                     gradient.addColorStop(0, 'rgba(255,255,255,1)');                    // Fully opaque at center
                     gradient.addColorStop(point.feather || 0.6, 'rgba(255,255,255,1)');        // Stay opaque until feather point (fallback to 0.6)
                     gradient.addColorStop(1, 'rgba(255,255,255,0)');                    // Fade to transparent at edge
                     
                     maskCtx.fillStyle = gradient;
-                    maskCtx.fillRect(0, 0, width, height);
+                    maskCtx.fillRect(0, 0, blurAreaWidth, blurAreaHeight);
                     
                     // Apply mask to blurred image
                     blurCtx.globalCompositeOperation = 'destination-in';
                     blurCtx.drawImage(maskCanvas, 0, 0);
                     
-                    // Composite the feathered blur back onto export canvas
-                    exportCtx.drawImage(blurCanvas, x, y);
+                    // Composite only the intersecting portion back onto export canvas
+                    const finalSourceX = canvasIntersectX - blurAreaX;
+                    const finalSourceY = canvasIntersectY - blurAreaY;
+                    
+                    exportCtx.drawImage(blurCanvas, 
+                        finalSourceX, finalSourceY, canvasIntersectWidth, canvasIntersectHeight,
+                        canvasIntersectX, canvasIntersectY, canvasIntersectWidth, canvasIntersectHeight);
                 });
                 
                 // Download the image
