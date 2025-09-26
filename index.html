@@ -1212,7 +1212,7 @@
                 maskCanvas.width = blurAreaWidth;
                 maskCanvas.height = blurAreaHeight;
                 
-                // Draw the area to blur canvas, handling edge cases
+                // Draw the area to blur canvas, handling edge cases with pixel extension
                 const sourceX = Math.max(0, blurAreaX);
                 const sourceY = Math.max(0, blurAreaY);
                 const sourceWidth = Math.min(this.canvas.width - sourceX, blurAreaWidth - (sourceX - blurAreaX));
@@ -1220,9 +1220,88 @@
                 const destX = sourceX - blurAreaX;
                 const destY = sourceY - blurAreaY;
                 
+                // First, draw the available image content
                 if (sourceWidth > 0 && sourceHeight > 0) {
                     blurCtx.drawImage(this.baseCanvas, sourceX, sourceY, sourceWidth, sourceHeight, 
                         destX, destY, sourceWidth, sourceHeight);
+                }
+                
+                // Extend edge pixels to fill areas beyond image boundaries
+                // Left edge extension
+                if (blurAreaX < 0 && sourceWidth > 0 && sourceHeight > 0) {
+                    const extendWidth = destX;
+                    if (extendWidth > 0) {
+                        blurCtx.drawImage(this.baseCanvas, sourceX, sourceY, 1, sourceHeight, 
+                            0, destY, extendWidth, sourceHeight);
+                    }
+                }
+                
+                // Right edge extension
+                if (blurAreaX + blurAreaWidth > this.canvas.width && sourceWidth > 0 && sourceHeight > 0) {
+                    const extendStartX = destX + sourceWidth;
+                    const extendWidth = blurAreaWidth - extendStartX;
+                    if (extendWidth > 0) {
+                        blurCtx.drawImage(this.baseCanvas, sourceX + sourceWidth - 1, sourceY, 1, sourceHeight, 
+                            extendStartX, destY, extendWidth, sourceHeight);
+                    }
+                }
+                
+                // Top edge extension
+                if (blurAreaY < 0 && sourceWidth > 0 && sourceHeight > 0) {
+                    const extendHeight = destY;
+                    if (extendHeight > 0) {
+                        blurCtx.drawImage(this.baseCanvas, sourceX, sourceY, sourceWidth, 1, 
+                            destX, 0, sourceWidth, extendHeight);
+                    }
+                }
+                
+                // Bottom edge extension
+                if (blurAreaY + blurAreaHeight > this.canvas.height && sourceWidth > 0 && sourceHeight > 0) {
+                    const extendStartY = destY + sourceHeight;
+                    const extendHeight = blurAreaHeight - extendStartY;
+                    if (extendHeight > 0) {
+                        blurCtx.drawImage(this.baseCanvas, sourceX, sourceY + sourceHeight - 1, sourceWidth, 1, 
+                            destX, extendStartY, sourceWidth, extendHeight);
+                    }
+                }
+                
+                // Corner extensions
+                // Top-left corner
+                if (blurAreaX < 0 && blurAreaY < 0 && sourceWidth > 0 && sourceHeight > 0) {
+                    blurCtx.drawImage(this.baseCanvas, sourceX, sourceY, 1, 1, 
+                        0, 0, destX, destY);
+                }
+                
+                // Top-right corner
+                if (blurAreaX + blurAreaWidth > this.canvas.width && blurAreaY < 0 && sourceWidth > 0 && sourceHeight > 0) {
+                    const extendStartX = destX + sourceWidth;
+                    const extendWidth = blurAreaWidth - extendStartX;
+                    if (extendWidth > 0) {
+                        blurCtx.drawImage(this.baseCanvas, sourceX + sourceWidth - 1, sourceY, 1, 1, 
+                            extendStartX, 0, extendWidth, destY);
+                    }
+                }
+                
+                // Bottom-left corner
+                if (blurAreaX < 0 && blurAreaY + blurAreaHeight > this.canvas.height && sourceWidth > 0 && sourceHeight > 0) {
+                    const extendStartY = destY + sourceHeight;
+                    const extendHeight = blurAreaHeight - extendStartY;
+                    if (extendHeight > 0) {
+                        blurCtx.drawImage(this.baseCanvas, sourceX, sourceY + sourceHeight - 1, 1, 1, 
+                            0, extendStartY, destX, extendHeight);
+                    }
+                }
+                
+                // Bottom-right corner
+                if (blurAreaX + blurAreaWidth > this.canvas.width && blurAreaY + blurAreaHeight > this.canvas.height && sourceWidth > 0 && sourceHeight > 0) {
+                    const extendStartX = destX + sourceWidth;
+                    const extendStartY = destY + sourceHeight;
+                    const extendWidth = blurAreaWidth - extendStartX;
+                    const extendHeight = blurAreaHeight - extendStartY;
+                    if (extendWidth > 0 && extendHeight > 0) {
+                        blurCtx.drawImage(this.baseCanvas, sourceX + sourceWidth - 1, sourceY + sourceHeight - 1, 1, 1, 
+                            extendStartX, extendStartY, extendWidth, extendHeight);
+                    }
                 }
                 
                 // Apply blur effect - use mobile-compatible method
@@ -1663,7 +1742,7 @@
                     maskCanvas.width = blurAreaWidth;
                     maskCanvas.height = blurAreaHeight;
                     
-                    // Draw the area to blur canvas, handling edge cases
+                    // Draw the area to blur canvas, handling edge cases with pixel extension
                     const sourceX = Math.max(0, blurAreaX);
                     const sourceY = Math.max(0, blurAreaY);
                     const sourceWidth = Math.min(exportCanvas.width - sourceX, blurAreaWidth - (sourceX - blurAreaX));
@@ -1671,9 +1750,88 @@
                     const destX = sourceX - blurAreaX;
                     const destY = sourceY - blurAreaY;
                     
+                    // First, draw the available image content
                     if (sourceWidth > 0 && sourceHeight > 0) {
                         blurCtx.drawImage(this.originalImage, sourceX, sourceY, sourceWidth, sourceHeight, 
                             destX, destY, sourceWidth, sourceHeight);
+                    }
+                    
+                    // Extend edge pixels to fill areas beyond image boundaries
+                    // Left edge extension
+                    if (blurAreaX < 0 && sourceWidth > 0 && sourceHeight > 0) {
+                        const extendWidth = destX;
+                        if (extendWidth > 0) {
+                            blurCtx.drawImage(this.originalImage, sourceX, sourceY, 1, sourceHeight, 
+                                0, destY, extendWidth, sourceHeight);
+                        }
+                    }
+                    
+                    // Right edge extension
+                    if (blurAreaX + blurAreaWidth > exportCanvas.width && sourceWidth > 0 && sourceHeight > 0) {
+                        const extendStartX = destX + sourceWidth;
+                        const extendWidth = blurAreaWidth - extendStartX;
+                        if (extendWidth > 0) {
+                            blurCtx.drawImage(this.originalImage, sourceX + sourceWidth - 1, sourceY, 1, sourceHeight, 
+                                extendStartX, destY, extendWidth, sourceHeight);
+                        }
+                    }
+                    
+                    // Top edge extension
+                    if (blurAreaY < 0 && sourceWidth > 0 && sourceHeight > 0) {
+                        const extendHeight = destY;
+                        if (extendHeight > 0) {
+                            blurCtx.drawImage(this.originalImage, sourceX, sourceY, sourceWidth, 1, 
+                                destX, 0, sourceWidth, extendHeight);
+                        }
+                    }
+                    
+                    // Bottom edge extension
+                    if (blurAreaY + blurAreaHeight > exportCanvas.height && sourceWidth > 0 && sourceHeight > 0) {
+                        const extendStartY = destY + sourceHeight;
+                        const extendHeight = blurAreaHeight - extendStartY;
+                        if (extendHeight > 0) {
+                            blurCtx.drawImage(this.originalImage, sourceX, sourceY + sourceHeight - 1, sourceWidth, 1, 
+                                destX, extendStartY, sourceWidth, extendHeight);
+                        }
+                    }
+                    
+                    // Corner extensions
+                    // Top-left corner
+                    if (blurAreaX < 0 && blurAreaY < 0 && sourceWidth > 0 && sourceHeight > 0) {
+                        blurCtx.drawImage(this.originalImage, sourceX, sourceY, 1, 1, 
+                            0, 0, destX, destY);
+                    }
+                    
+                    // Top-right corner
+                    if (blurAreaX + blurAreaWidth > exportCanvas.width && blurAreaY < 0 && sourceWidth > 0 && sourceHeight > 0) {
+                        const extendStartX = destX + sourceWidth;
+                        const extendWidth = blurAreaWidth - extendStartX;
+                        if (extendWidth > 0) {
+                            blurCtx.drawImage(this.originalImage, sourceX + sourceWidth - 1, sourceY, 1, 1, 
+                                extendStartX, 0, extendWidth, destY);
+                        }
+                    }
+                    
+                    // Bottom-left corner
+                    if (blurAreaX < 0 && blurAreaY + blurAreaHeight > exportCanvas.height && sourceWidth > 0 && sourceHeight > 0) {
+                        const extendStartY = destY + sourceHeight;
+                        const extendHeight = blurAreaHeight - extendStartY;
+                        if (extendHeight > 0) {
+                            blurCtx.drawImage(this.originalImage, sourceX, sourceY + sourceHeight - 1, 1, 1, 
+                                0, extendStartY, destX, extendHeight);
+                        }
+                    }
+                    
+                    // Bottom-right corner
+                    if (blurAreaX + blurAreaWidth > exportCanvas.width && blurAreaY + blurAreaHeight > exportCanvas.height && sourceWidth > 0 && sourceHeight > 0) {
+                        const extendStartX = destX + sourceWidth;
+                        const extendStartY = destY + sourceHeight;
+                        const extendWidth = blurAreaWidth - extendStartX;
+                        const extendHeight = blurAreaHeight - extendStartY;
+                        if (extendWidth > 0 && extendHeight > 0) {
+                            blurCtx.drawImage(this.originalImage, sourceX + sourceWidth - 1, sourceY + sourceHeight - 1, 1, 1, 
+                                extendStartX, extendStartY, extendWidth, extendHeight);
+                        }
                     }
                     
                     // Apply blur to the extracted area - use mobile-compatible method
